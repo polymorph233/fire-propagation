@@ -1,15 +1,16 @@
 import org.example.core.Game;
 import org.example.core.Pair;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 
 public class TestBoardGame {
 
-    @org.junit.Test
+    @Test
     public void testInCaseAlwaysSetOnFire() {
         List<Pair<Integer, Integer>> initFires = new ArrayList<>();
         initFires.add(new Pair<>(1, 2));
@@ -43,6 +44,26 @@ public class TestBoardGame {
         step3.append("OOXOO\n");
         step3.append("OOOOO\n");
         assertEquals(game.peek(), step3.toString());
+    }
+
+    @Test
+    public void testGameFinish() {
+        List<Pair<Integer, Integer>> initFires = new ArrayList<>();
+        initFires.add(new Pair<>(1, 1));
+
+        var game = new Game(2, 2, 1.0, initFires);
+
+        game.nextTurn();
+
+        assertFalse(game.isGameFinished());
+
+        game.nextTurn();
+
+        assertFalse(game.isGameFinished());
+
+        game.nextTurn();
+
+        assertTrue(game.isGameFinished());
     }
 }
 

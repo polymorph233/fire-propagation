@@ -38,4 +38,8 @@ public class Game {
     public String peek() {
         return this.board.toString();
     }
+
+    public boolean isGameFinished() {
+        return board.isGameFinished();
+    }
 }

@@ -6,7 +6,7 @@
       - randomize?
     - propagation rate
 
-- Game modeling
-- Game stop?
+- [x] Game modeling
+- [x] Game stop?
 - Take into account the config file
 - Wrap up

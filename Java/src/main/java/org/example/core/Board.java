@@ -8,8 +8,11 @@ public class Board {
 
     private Square[][] board;
 
+    private boolean gameFinished;
+
     public Board(int height, int width, List<Pair<Integer, Integer>> initCoos) {
         this.board = new Square[height][width];
+        this.gameFinished = false;
         for (var i = 0; i < height; i++) {
             for (var j = 0; j < width; j++) {
                 this.board[i][j] = new Square(State.TREE);
@@ -36,8 +39,30 @@ public class Board {
         return false;
     }
 
+    public boolean isGameFinished() {
+        if (gameFinished) {
+            return true;
+        } else {
+            for (var line : board) {
+                for (var sq : line) {
+                    if (sq.getState() == State.ON_FIRE) {
+                        return false;
+                    }
+                }
+            }
+            gameFinished = true;
+            return true;
+        }
+    }
+
     public void updateBoard(Supplier<Boolean> thresholdCondition) {
+        if (gameFinished) {
+            System.out.println("Game is already finished, nothing left");
+            return;
+        }
+
         var newBoard = new Square[board.length][board[0].length];
+        var dirty = false;
 
         for (var i = 0; i < board.length; i++) {
             for (var j = 0; j < board.length; j++) {
@@ -47,12 +72,14 @@ public class Board {
                             if (thresholdCondition.get()) {
                                 newBoard[i][j] = new Square(State.ON_FIRE);
                             }
+                            dirty = true;
                         } else {
                             newBoard[i][j] = board[i][j];
                         }
                         break;
                     case ON_FIRE:
                         newBoard[i][j] = new Square(State.ASHES);
+                        dirty = true;
                         break;
                     case ASHES:
                         newBoard[i][j] = board[i][j];
@@ -61,6 +88,9 @@ public class Board {
             }
         }
         board = newBoard;
+        if (!dirty) {
+            gameFinished = true;
+        }
     }
 
     @Override
