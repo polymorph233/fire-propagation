@@ -1,0 +1,6 @@
+length: 5
+width: 5
+propagation: 0.5
+init count: 2
+1, 2
+2, 3
