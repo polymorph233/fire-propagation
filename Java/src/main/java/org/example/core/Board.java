@@ -69,10 +69,15 @@ public class Board {
                 switch (board[i][j].getState()) {
                     case TREE:
                         if (neighborOnFireAtLastIteration(i, j)) {
+                            // If the condition holds ... the fire propage to this square
                             if (thresholdCondition.get()) {
                                 newBoard[i][j] = new Square(State.ON_FIRE);
+                                dirty = true;
+                            // Neighbor was on fire but this square is lucky
+                            } else {
+                                newBoard[i][j] = board[i][j];
                             }
-                            dirty = true;
+                        // No neighbor on fire, it's safe
                         } else {
                             newBoard[i][j] = board[i][j];
                         }

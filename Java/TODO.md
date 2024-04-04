@@ -8,5 +8,5 @@
 
 - [x] Game modeling
 - [x] Game stop?
-- Take into account the config file
+- [x] Take into account the config file
 - Wrap up
