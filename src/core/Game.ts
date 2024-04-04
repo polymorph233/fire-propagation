@@ -26,9 +26,14 @@ class Game {
     return this.board.toString()
   }
 
+  produceStateSequence()  {
+    return this.board.toStringTrimmed()
+  }
+
   isGameFinished() {
     return this.board.isGameFinished()
   }
+
 }
 
 export { Game }

@@ -108,6 +108,10 @@ class Board {
   toString() {
     return this.board.map(line => line.join('')).join('\n')
   }
+
+  toStringTrimmed() {
+    return this.board.map(line => line.join('')).join('')
+  }
 }
 
 export { Board }

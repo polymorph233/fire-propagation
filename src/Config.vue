@@ -7,22 +7,25 @@ let route = useRouter()
 
 let width = ref(5)
 let height = ref(5)
+let propagationRate = ref(0.5)
 
 let cooInFreeForm = ref("")
 
-const checkValidOrSetToDefault = (field: Ref<number>, backing: number) => {
-  if (field.value < 0 || field.value > 60) {
+const checkValidOrSetToDefault = (field: Ref<number>, from: number, to: number, backing: number) => {
+  if (field.value < from || field.value > to) {
     return backing
   } else {
     return field.value
   }
 }
 
-const buildAndNavigateToGame = () => {
-  let validHeight = checkValidOrSetToDefault(height, 5)
-  let validWidth = checkValidOrSetToDefault(width, 5)
 
-  route.push({ name: 'game-page', query: { height: validHeight, width: validWidth, coos: cooInFreeForm.value } })
+const buildAndNavigateToGame = () => {
+  let validHeight = checkValidOrSetToDefault(height, 0, 60, 5)
+  let validWidth = checkValidOrSetToDefault(width, 0, 60, 5)
+  let validRate = checkValidOrSetToDefault(propagationRate, 0.0, 1.0, 0.5)
+
+  route.push({ name: 'game-page', query: { height: validHeight, width: validWidth, rate: validRate, coos: cooInFreeForm.value } })
 }
 
 </script>
@@ -35,6 +38,10 @@ const buildAndNavigateToGame = () => {
   <div>
     <div>Width</div>
     <input class="input" type="number" min=0 max=20  v-model="width" />
+  </div>
+  <div>
+    <div>Propagation rate</div>
+    <input class="input" type="number" min=0 max=1 step="0.01"  v-model="propagationRate" />
   </div>
   <div>
     <div>Initial coordinates</div>
