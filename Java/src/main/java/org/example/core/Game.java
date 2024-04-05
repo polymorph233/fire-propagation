@@ -4,17 +4,54 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
+/**
+ * This class simulates a game engine that take into account a board and executes the game.
+ * Most of the core logics are inside the {@link Board} type, but this class serves mainly to
+ * configure the `propagationCondition`. <br>
+ * It could be a starting point for building more complex configurations.
+ */
 public class Game {
 
+    /**
+     * An instance of {@link Board} that it proxies to
+     */
     private Board board;
 
+    /**
+     * Randomness source provider
+     */
     private Random random;
 
+    /**
+     * A lambda that encapsulates the propagation condition
+     */
     private Supplier<Boolean> propagationCondition;
 
+    /**
+     * Initialize the game
+     * @param height height of the board
+     * @param width width of the board
+     * @param propagationRate a floating value to indicate the rate of setting an adjacent square on
+     *                        fire, it should be set between (inclusive) 0.0 and 1.0.
+     *                        0.0 means no adjacent square will on fire and 1.0 means that any adjacent
+     *                        square will be set on fire.
+     * @param initCoos initial coordinates in form of a list. Any coordinate that's out of range will
+     *                 be discarded.
+     */
     public Game(int height, int width, double propagationRate, List<Pair<Integer, Integer>> initCoos) {
+        if (height <= 0 || width <= 0) {
+            throw new IllegalArgumentException("Height and width should be strictly positive integers");
+        }
+        if (propagationRate < 0.0) {
+            System.out.println("Propagation rate is negative, the game will stop immediately");
+        }
+        if (propagationRate > 1.0) {
+            System.out.println("Propagation rate is larger than 1.0, which has same effect as 1.0");
+        }
         this.board = new Board(height, width, initCoos);
         this.random = new Random();
+
+        // Set up the propagation condition, it would simply return true or false according to the given rate
         this.propagationCondition = () -> {
             var curr = random.nextDouble();
             if (curr < propagationRate) {
@@ -25,20 +62,35 @@ public class Game {
         };
     }
 
+    /**
+     * Move the game into next iteration, it calls the board to update simply
+     */
     public void nextTurn() {
         this.board.updateBoard(propagationCondition);
     }
 
-    public String printAndAdvance() {
-        var currState = this.board.toString();
+    /**
+     * Move the game into next iteration *while* returning the *current* board status
+     * @return a 2d string array representing the board's current status
+     */
+    public String[][] printAndAdvance() {
+        var currState = this.board.show();
         nextTurn();
         return currState;
     }
 
-    public String peek() {
-        return this.board.toString();
+    /**
+     * Inspect the current state of the board without advancing it
+     * @return a 2d string array representing the board's current status
+     */
+    public String[][] peek() {
+        return this.board.show();
     }
 
+    /**
+     * Check if the game is finished
+     * @return true if game is finished, otherwise false
+     */
     public boolean isGameFinished() {
         return board.isGameFinished();
     }
