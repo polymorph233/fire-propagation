@@ -17,5 +17,5 @@
 
 
 - In general
-  - README
+  - [x] README
   - Try to build a way to share API or design, maybe through docs
