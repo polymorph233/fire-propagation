@@ -4,12 +4,29 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * A board represent a playground where the game is launched and played through
+ * steps.
+ */
 public class Board {
 
+    /**
+     * Game board is represented by a 2d array of squares
+     */
     private Square[][] board;
 
+    /**
+     * If the game is finished, this flag is set to true to prevent unnecessary calculations
+     */
     private boolean gameFinished;
 
+
+    /**
+     * Initialize a new board
+     * @param height height of the board
+     * @param width width of the board
+     * @param initCoos initial coordinates that are set on fire in first turn
+     */
     public Board(int height, int width, List<Pair<Integer, Integer>> initCoos) {
         this.board = new Square[height][width];
         this.gameFinished = false;
@@ -23,6 +40,12 @@ public class Board {
         }
     }
 
+    /**
+     * Check if a given location (i, j) has at least one neighbor that's on fire
+     * @param i the offset on height axis
+     * @param j the offset on width axis
+     * @return true if it's the case or false
+     */
     private boolean neighborOnFireAtLastIteration(int i, int j) {
         if (i > 0 && board[i-1][j].getState() == State.ON_FIRE) {
             return true;
@@ -39,6 +62,15 @@ public class Board {
         return false;
     }
 
+    /**
+     * Check if the game is finished. <br>
+     * In a board, there is a variable `gameFinished` which will be set to true once the game is finished.
+     * This method looks up this variable and return true if it's true, otherwise it will iterate through
+     * the board to check if any square is on fire, which indicates that it's not finished, and update the
+     * variable accordingly. <br>
+     * Warning: this operation could be time-consuming if board is large.
+     * @return true if the game is finished
+     */
     public boolean isGameFinished() {
         if (gameFinished) {
             return true;
@@ -55,6 +87,14 @@ public class Board {
         }
     }
 
+    /**
+     * Perform the game into next iteration <br>
+     * It takes a lambda that defines the propagation rate of this game, to be effective in this next iteration.
+     * @param thresholdCondition a lambda of type () -> Boolean, where you can encapsulate
+     *                           a random generator to provide randomness, or simply return
+     *                           true if you want to set everywhere on fire, or false if you
+     *                           want to stop the fire immediately.
+     */
     public void updateBoard(Supplier<Boolean> thresholdCondition) {
         if (gameFinished) {
             System.out.println("Game is already finished, nothing left");

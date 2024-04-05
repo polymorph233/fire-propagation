@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The reader to read from configuration file and build up a game
+ */
 public class ConfigReader {
 
     public ConfigReader() {
