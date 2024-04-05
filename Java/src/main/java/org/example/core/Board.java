@@ -36,7 +36,12 @@ public class Board {
             }
         }
         for (var coo : initCoos) {
-            this.board[coo.first][coo.second] = new Square(State.ON_FIRE);
+            var i = coo.first;
+            var j = coo.second;
+            // Only take into account coordinates that are in range of the board
+            if (0 <= i && i < height && 0 <= j && j < width) {
+                this.board[coo.first][coo.second] = new Square(State.ON_FIRE);
+            }
         }
     }
 

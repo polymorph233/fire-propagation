@@ -12,7 +12,7 @@
 - Wrap up
   - [x] Documentation and comments
   - Use logger to accompany the program
-  - Find corner cases (e.g. array index access) to enhance them
+  - [x] Find corner cases (e.g. array index access) to enhance them
   - Rework the file open and config parsing process
 
 

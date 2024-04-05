@@ -39,6 +39,15 @@ public class Game {
      *                 be discarded.
      */
     public Game(int height, int width, double propagationRate, List<Pair<Integer, Integer>> initCoos) {
+        if (height <= 0 || width <= 0) {
+            throw new IllegalArgumentException("Height and width should be strictly positive integers");
+        }
+        if (propagationRate < 0.0) {
+            System.out.println("Propagation rate is negative, the game will stop immediately");
+        }
+        if (propagationRate > 1.0) {
+            System.out.println("Propagation rate is larger than 1.0, which has same effect as 1.0");
+        }
         this.board = new Board(height, width, initCoos);
         this.random = new Random();
 
