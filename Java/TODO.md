@@ -10,3 +10,12 @@
 - [x] Game stop?
 - [x] Take into account the config file
 - Wrap up
+  - Documentation and comments
+  - Use logger to accompany the program
+  - Find corner cases (e.g. array index access) to enhance them
+  - Rework the file open and config parsing process
+
+
+- In general
+  - README
+  - Try to build a way to share API or design, maybe through docs
