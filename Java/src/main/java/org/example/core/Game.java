@@ -71,20 +71,20 @@ public class Game {
 
     /**
      * Move the game into next iteration *while* returning the *current* board status
-     * @return a string representing the board's current status
+     * @return a 2d string array representing the board's current status
      */
-    public String printAndAdvance() {
-        var currState = this.board.toString();
+    public String[][] printAndAdvance() {
+        var currState = this.board.show();
         nextTurn();
         return currState;
     }
 
     /**
      * Inspect the current state of the board without advancing it
-     * @return a string representing the board's current status
+     * @return a 2d string array representing the board's current status
      */
-    public String peek() {
-        return this.board.toString();
+    public String[][] peek() {
+        return this.board.show();
     }
 
     /**

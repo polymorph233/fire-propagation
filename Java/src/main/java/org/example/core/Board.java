@@ -1,5 +1,6 @@
 package org.example.core;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -141,6 +142,19 @@ public class Board {
         if (!dirty) {
             gameFinished = true;
         }
+    }
+
+    /**
+     * Just like the `toString` method, but instead of joining square representations together,
+     * it maintains a structure of 2d array so that this structure could be exploited by caller
+     * to deliver custom info regarding various use case.
+     * @return a 2d array where each element represents a corresponding square (with its state)
+     */
+    public String[][] show() {
+        return Arrays.stream(board)
+                .map(line -> Arrays.stream(line)
+                        .map(Square::toString).toArray(String[]::new))
+                .toArray(String[][]::new);
     }
 
     @Override

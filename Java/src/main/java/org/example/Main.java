@@ -13,7 +13,14 @@ public class Main {
             var game = configReader.buildGame();
 
             while (!game.isGameFinished()) {
-                System.out.println(game.printAndAdvance());
+                var currSnap = game.printAndAdvance();
+                for (var line : currSnap) {
+                    for (var sqState : line) {
+                        System.out.print(sqState);
+                    }
+                    System.out.println();
+                }
+                System.out.println();
             }
 
         } catch (IOException e) {
