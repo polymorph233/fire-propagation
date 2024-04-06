@@ -1,11 +1,24 @@
 import {Square, State} from "./Square";
 
+/**
+ * A board that represents the game and mutates it to proceed the game
+ */
 class Board {
+
   private board: Square[][]
   private gameFinished: boolean
 
+  /**
+   * Initialize a game board
+   * @param height height of the board, must be an absolute positive int
+   * @param width width of the board, must be an absolute positive int
+   * @param initCoos initial coos, in shape of `Array<Array<int>>` where the inner array has only two elements
+   *                 to indicate y and x
+   */
   constructor(height: number, width: number, initCoos: number[][]) {
     this.board = []
+
+    // Set every square to tree by default
     for (let i = 0 ; i < height; i++) {
       let line: Square[] = []
       for (let j = 0; j < width; j++) {
@@ -13,13 +26,20 @@ class Board {
       }
       this.board.push(line)
     }
+    // Set end game flag to false
     this.gameFinished = false
 
+    // Fill in squares that's initially on fire by provided coo
     for (let coo of initCoos) {
       this.board[coo[0]][coo[1]] = new Square(State.ON_FIRE)
     }
   }
 
+  /**
+   * Check if the square of y=i, x=i has any adjacent square on fire
+   * @param i first coordinate
+   * @param j second coordinate
+   */
   private neighborOnFireAtLastIteration(i: number, j: number) {
     if (i > 0 && this.board[i - 1][j].getState() == State.ON_FIRE) {
       return true;
@@ -36,6 +56,12 @@ class Board {
     return false;
   }
 
+  /**
+   * Check if the game is finished.
+   *
+   * This method uses the `#gameFinished` field to memorize the state in case game is finished,
+   * otherwise it will iterate the whole grid each time the method is called.
+   */
   isGameFinished() {
     if (this.gameFinished) {
       return true;
@@ -52,13 +78,21 @@ class Board {
     }
   }
 
-  updateBoard(thresholdCondition) {
+  /**
+   * Update the board to next round
+   *
+   * If the game is finished, it will do nothing.
+   * @param thresholdCondition a lambda that decides if a square should on fire, in type of `() -> bool`
+   */
+  updateBoard(thresholdCondition: () => boolean) {
     if (this.gameFinished) {
       console.log("Game is already finished, nothing left");
       return;
     }
 
-    var newBoard: Square[][] = []
+    // Initial a new board with new values, so that the last state of old board will not
+    // interfere
+    let newBoard: Square[][] = []
     for (let i = 0 ; i < this.board.length; i++) {
       let line: Square[] = []
       for (let j = 0; j < this.board[0].length; j++) {
@@ -66,14 +100,16 @@ class Board {
       }
       newBoard.push(line)
     }
-    var dirty = false;
 
-    for (var i = 0; i < this.board.length; i++) {
-      for (var j = 0; j < this.board.length; j++) {
+    // Local variable to store if the board has been modified
+    let dirty = false;
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board.length; j++) {
         switch (this.board[i][j].getState()) {
           case State.TREE: {
             if (this.neighborOnFireAtLastIteration(i, j)) {
-              // If the condition holds ... the fire propage to this square
+              // If the condition holds ... the fire propagate to this square
               if (thresholdCondition()) {
                 newBoard[i][j] = new Square(State.ON_FIRE);
                 dirty = true;
@@ -99,16 +135,28 @@ class Board {
         }
       }
     }
+    // Move the new board to the `this.board` variable
     this.board = newBoard;
     if (!dirty) {
+      // update the flag if game is finished (i.e. no update was performed
       this.gameFinished = true;
     }
   }
 
+  /**
+   * Render a string where board is shown in lines concatenated by a new line
+   *
+   * It uses the `toString` method of Square
+   */
   toString() {
     return this.board.map(line => line.join('')).join('\n')
   }
 
+  /**
+   * Render a string where board is shown in a single line that contains all squares in a run
+   *
+   * It uses the `toString` method of Square
+   */
   toStringTrimmed() {
     return this.board.map(line => line.join('')).join('')
   }

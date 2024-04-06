@@ -3,14 +3,17 @@
 import {useRouter} from "vue-router";
 import {Ref, ref} from "vue";
 
+// Import the vue-router facilities
 let route = useRouter()
 
+// Set up private fields of the `Config` page that holds sources of the inputs
 let width = ref(5)
 let height = ref(5)
 let propagationRate = ref(0.5)
 
 let cooInFreeForm = ref("")
 
+// Check if a field is valid, by given range and returns it, otherwise it would return to backing field
 const checkValidOrSetToDefault = (field: Ref<number>, from: number, to: number, backing: number) => {
   if (field.value < from || field.value > to) {
     return backing
@@ -19,7 +22,9 @@ const checkValidOrSetToDefault = (field: Ref<number>, from: number, to: number, 
   }
 }
 
-
+/**
+ * Validate inputs and use them to navigate to game page
+ */
 const buildAndNavigateToGame = () => {
   let validHeight = checkValidOrSetToDefault(height, 0, 60, 5)
   let validWidth = checkValidOrSetToDefault(width, 0, 60, 5)
