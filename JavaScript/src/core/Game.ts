@@ -19,6 +19,8 @@ class Game {
   constructor(height: number, width: number, propagationRate: number, initCoos: number[][]) {
     this.board = new Board(height, width, initCoos)
     this.propagationCondition = () => {
+      // Comparing negative or float that's larger than 1.0 with 0.0 or 1.0 should be safe
+      // so we don't check the propagationRate here
       let curr = Math.random();
       return curr < propagationRate;
     }

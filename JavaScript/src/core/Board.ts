@@ -16,6 +16,15 @@ class Board {
    *                 to indicate y and x
    */
   constructor(height: number, width: number, initCoos: number[][]) {
+    // If height or width are 0, negative or too large, set them to default, which is 5
+    // It's hard to throw an exception here
+    if (height <= 0 || height > 50) {
+      height = 5
+    }
+    if (width <= 0 || width > 50) {
+      width = 5
+    }
+
     this.board = []
 
     // Set every square to tree by default
@@ -31,7 +40,13 @@ class Board {
 
     // Fill in squares that's initially on fire by provided coo
     for (let coo of initCoos) {
-      this.board[coo[0]][coo[1]] = new Square(State.ON_FIRE)
+      if (coo.length === 2) {
+        const [y, x] = [coo[0], coo[1]]
+        if (0 < y && y < height && 0 < x && x < width) {
+          this.board[coo[0]][coo[1]] = new Square(State.ON_FIRE)
+        }
+      }
+      // Any invalid input (wrong elem. count or out of range) will get discarded
     }
   }
 
@@ -41,16 +56,16 @@ class Board {
    * @param j second coordinate
    */
   private neighborOnFireAtLastIteration(i: number, j: number) {
-    if (i > 0 && this.board[i - 1][j].getState() == State.ON_FIRE) {
+    if (i > 0 && this.board[i - 1][j].getState() === State.ON_FIRE) {
       return true;
     }
-    if (i < this.board.length - 1 && this.board[i + 1][j].getState() == State.ON_FIRE) {
+    if (i < this.board.length - 1 && this.board[i + 1][j].getState() === State.ON_FIRE) {
       return true;
     }
-    if (j > 0 && this.board[i][j - 1].getState() == State.ON_FIRE) {
+    if (j > 0 && this.board[i][j - 1].getState() === State.ON_FIRE) {
       return true;
     }
-    if (j < this.board[0].length - 1 && this.board[i][j + 1].getState() == State.ON_FIRE) {
+    if (j < this.board[0].length - 1 && this.board[i][j + 1].getState() === State.ON_FIRE) {
       return true;
     }
     return false;
@@ -68,7 +83,7 @@ class Board {
     } else {
       for (let line of this.board) {
         for (let sq of line) {
-          if (sq.getState() == State.ON_FIRE) {
+          if (sq.getState() === State.ON_FIRE) {
             return false;
           }
         }
@@ -109,16 +124,17 @@ class Board {
         switch (this.board[i][j].getState()) {
           case State.TREE: {
             if (this.neighborOnFireAtLastIteration(i, j)) {
-              // If the condition holds ... the fire propagate to this square
+
               if (thresholdCondition()) {
+                // If the condition holds ... the fire propagate to this square
                 newBoard[i][j] = new Square(State.ON_FIRE);
                 dirty = true;
-                // Neighbor was on fire but this square is lucky
               } else {
+                // Neighbor was on fire but this square is lucky
                 newBoard[i][j] = this.board[i][j];
               }
-              // No neighbor on fire, it's safe
             } else {
+              // No neighbor on fire, it's safe
               newBoard[i][j] = this.board[i][j];
             }
             break;
