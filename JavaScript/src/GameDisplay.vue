@@ -148,13 +148,10 @@ const renderGameSteps = (steps: string[]) => {
   <div class="grid">
     <div v-for="i in (count)" :key="i" class="square">
       <div v-if="renderSource[i-1] === 'X'" class="fire">
-        {{renderSource[i-1]}}
       </div>
       <div v-else-if="renderSource[i-1] === 'O'" class="tree">
-        {{renderSource[i-1]}}
       </div>
       <div v-else class="ashes">
-        {{renderSource[i-1]}}
       </div>
     </div>
   </div>
