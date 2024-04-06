@@ -122,7 +122,7 @@ const getAllGameSteps = (): string[] => {
 
 /**
  * Render all steps of the game in a speed of 0.5 sec between frames
- * @param steps all steps of the game, in a shape of string array
+ * @param steps all steps of the game
  */
 const renderGameSteps = (steps: string[]) => {
   if (steps.length === 0) {

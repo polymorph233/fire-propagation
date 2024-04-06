@@ -42,7 +42,7 @@ class Board {
     for (let coo of initCoos) {
       if (coo.length === 2) {
         const [y, x] = [coo[0], coo[1]]
-        if (0 < y && y < height && 0 < x && x < width) {
+        if (0 <= y && y < height && 0 <= x && x < width) {
           this.board[coo[0]][coo[1]] = new Square(State.ON_FIRE)
         }
       }
