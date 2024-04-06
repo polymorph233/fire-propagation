@@ -6,6 +6,11 @@ A simple game to simulate fire propagation
 
 ```bash
 
+# check Java version
+$ java --version
+
+# ensure you have a JDK of at least version 11
+
 # Navigate to root path
 $ cd src/main/java
 
