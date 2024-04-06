@@ -49,17 +49,7 @@ onMounted(() => {
   // Fill in count field
   count.value = _width * _height
 
-  // Set up the game object
-  game.value = new Game(height.value, width.value, rate.value, coos.value)
-
-  // Set up the render source to represent a board where all squares are trees
-  renderSource.value = "O".repeat(_height * _width)
-
-  // Run the game and get all inputs at once
-  const allSteps = getAllGameSteps()
-
-  // Render the game where each steps are interpolated by 0.5 secs
-  renderGameSteps(allSteps)
+  buildAndRunGame(_height, _width)
 })
 
 /**
@@ -137,13 +127,47 @@ const renderGameSteps = (steps: string[]) => {
   }
 }
 
+const gameFinished = () => {
+  return game.value.isGameFinished()
+}
+
+/**
+ * Build a game and run it
+ * @param _height height of the board
+ * @param _width width of the board
+ */
+const buildAndRunGame = (_height: number, _width: number) => {
+  // Set up the game object
+  game.value = new Game(height.value, width.value, rate.value, coos.value)
+
+  // Set up the render source to represent a board where all squares are trees
+  renderSource.value = "O".repeat(_height * _width)
+
+  // Run the game and get all inputs at once
+  const allSteps = getAllGameSteps()
+
+  // Render the game where each steps are interpolated by 0.5 secs
+  renderGameSteps(allSteps)
+}
+
 </script>
 
 <template>
-  <div>Height: {{ height }}</div>
-  <div>Width: {{ width }}</div>
-  <div>Rate: {{ rate }}</div>
-  <div>Validated coos: {{ coos }}</div>
+  <div class="container">
+    <div class="half-column">
+      <div>Height: {{ height }}</div>
+      <div>Width: {{ width }}</div>
+      <div>Rate: {{ rate }}</div>
+      <div>Validated coos: {{ coos }}</div>
+    </div>
+
+    <div class="half-column">
+      <button class="button " @click="goBack()">Back</button>
+      <div v-if="gameFinished">
+        <button class="button " @click="buildAndRunGame(height, width)">Play a new game</button>
+      </div>
+    </div>
+  </div>
 
   <div class="grid">
     <div v-for="i in (count)" :key="i" class="square">
@@ -156,12 +180,20 @@ const renderGameSteps = (steps: string[]) => {
     </div>
   </div>
 
-  <div>
-    <button class="button" @click="goBack()">Back</button>
-  </div>
+
 </template>
 
 <style scoped>
+
+.container {
+  display: flex;
+  width: 100%;
+}
+
+.half-column {
+  width: 50%;
+}
+
 
 .grid {
   width: 800px;
